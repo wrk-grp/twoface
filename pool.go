@@ -39,7 +39,7 @@ Run the workers, after creating and assigning them to the pool.
 */
 func (pool *Pool) Run() *Pool {
 	// Start the auto-scaler to control the pool size dynamically.
-	// NewScaler(pool).Run()
+	NewScaler(pool)
 
 	// Start the job scheduling process.
 	go pool.dispatch()
