@@ -1,4 +1,4 @@
-module github.com/theapemachine/twoface
+module github.com/wrk-grp/twoface
 
 go 1.19
 

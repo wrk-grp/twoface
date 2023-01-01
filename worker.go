@@ -1,6 +1,7 @@
 package twoface
 
 import (
+	"bytes"
 	"io"
 	"time"
 
@@ -12,14 +13,23 @@ Worker wraps a concurrent process that is able to process Job types
 scheduled onto a Pool.
 */
 type Worker struct {
+	ctx     *Context
 	pool    *Pool
 	jobs    chan Job
+	buffer  *bytes.Buffer
 	latency time.Duration
 }
 
 func NewWorker(pool *Pool) *Worker {
 	errnie.Trace()
-	return &Worker{pool, make(chan Job), 0 * time.Nanosecond}
+
+	return &Worker{
+		NewContext(),
+		pool,
+		make(chan Job),
+		bytes.NewBuffer([]byte{}),
+		0 * time.Nanosecond,
+	}
 }
 
 func (worker *Worker) Read(p []byte) (n int, err error) {
@@ -32,22 +42,26 @@ func (worker *Worker) Write(p []byte) (n int, err error) {
 	errnie.Trace()
 
 	go func() {
-		t := time.Now()
-
 		for {
 			select {
 			case <-worker.pool.ctx.Done():
 				if errnie.Handles(worker.Close()) != nil {
 					return
 				}
+			case <-worker.ctx.root.Done():
+				return
 			default:
 				worker.pool.workers <- worker.jobs
 				job := <-worker.jobs
+
+				t := time.Now()
 				job.Do()
+				worker.latency = time.Duration(
+					time.Since(t).Nanoseconds(),
+				)
 			}
 		}
 
-		worker.latency = time.Duration(time.Since(t).Nanoseconds())
 	}()
 
 	return len(p), io.EOF
@@ -55,6 +69,6 @@ func (worker *Worker) Write(p []byte) (n int, err error) {
 
 func (worker *Worker) Close() error {
 	errnie.Trace()
-	errnie.Debugs("not implemented")
+	worker.ctx.cancel()
 	return errnie.NewError(nil)
 }
