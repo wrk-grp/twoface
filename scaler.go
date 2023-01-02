@@ -1,6 +1,10 @@
 package twoface
 
-import "time"
+import (
+	"time"
+
+	"github.com/wrk-grp/errnie"
+)
 
 /*
 Scaler is a process that evaluates the resource load of a Pool and
@@ -20,15 +24,19 @@ type state struct {
 }
 
 func NewScaler(pool *Pool) {
+	errnie.Trace()
 	scaler := &Scaler{pool, make([]*Worker, 0), &state{0, true, false}}
 	scaler.initialize()
 }
 
 func (scaler *Scaler) initialize() {
+	errnie.Trace()
+
 	go func() {
 		var latency int64
 
 		for {
+			scaler.current.prev = latency
 			latency = 0
 
 			// Get the total latency of all active workers, as a representative
@@ -39,11 +47,11 @@ func (scaler *Scaler) initialize() {
 
 			// If we are currently scaled down to zero, we need to get
 			// some workers going first, before we can start scaling them.
-			if latency == 0 {
-				for i := 0; i < len(scaler.pool.jobs); i++ {
-					scaler.workers = append(
-						scaler.workers, NewWorker(scaler.pool),
-					)
+			if latency == 0 && len(scaler.workers) == 0 {
+				for i := 0; i < 1; i++ {
+					worker := NewWorker(scaler.pool)
+					scaler.workers = append(scaler.workers, worker)
+					worker.Write([]byte{})
 				}
 
 				continue
@@ -86,6 +94,8 @@ func (scaler *Scaler) initialize() {
 				worker, scaler.workers = scaler.workers[0], scaler.workers[1:]
 				worker.Close()
 			}
+
+			scaler.current = &state{latency, true, false}
 		}
 	}()
 }

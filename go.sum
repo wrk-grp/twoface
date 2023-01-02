@@ -193,6 +193,8 @@ github.com/subosito/gotenv v1.4.1 h1:jyEFiXpy21Wm81FBN71l9VoMMV8H8jG+qIK3GCpY6Qs
 github.com/subosito/gotenv v1.4.1/go.mod h1:ayKnFf/c6rvx/2iiLrJUk1e6plDbT3edrFNGqEflhK0=
 github.com/theapemachine/wrkspc v0.1.0 h1:/XvaulzTOGVnk6T3JHHHpq1RV+tEQ/PuTG+7qGOUvaE=
 github.com/theapemachine/wrkspc v0.1.0/go.mod h1:Z9muFOnYRtMYUALl8mcShrKbnsdiYNueHp4GKFrKirU=
+github.com/wrk-grp/errnie v0.0.3 h1:zjP2Ye/zjlHYJ5QkDF9jtPYSJXuwGQu3HVKTsvpDtx8=
+github.com/wrk-grp/errnie v0.0.3/go.mod h1:fpDF96kLXjV35LxZmbgmmqNrJWFFTSo7FQRSn8iOawk=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=

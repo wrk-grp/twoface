@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/theapemachine/wrkspc/errnie"
+	"github.com/wrk-grp/errnie"
 )
 
 /*
@@ -28,8 +28,6 @@ type Context struct {
 NewContext constructs a twoface.Context.
 */
 func NewContext() *Context {
-	errnie.Trace()
-
 	// Construct the underlying native Go Context with a CancelFunc
 	// and Deadline/Timeout.
 	ctx := context.Background()

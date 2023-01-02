@@ -5,7 +5,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/theapemachine/wrkspc/errnie"
+	"github.com/wrk-grp/errnie"
 )
 
 /*
@@ -21,8 +21,6 @@ type Worker struct {
 }
 
 func NewWorker(pool *Pool) *Worker {
-	errnie.Trace()
-
 	return &Worker{
 		NewContext(),
 		pool,

@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/pkg/errors v0.9.1
 	github.com/theapemachine/wrkspc v0.1.0
+	github.com/wrk-grp/errnie v0.0.3
 )
 
 require (
