@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/wrk-grp/errnie"
+	"github.com/wrk-grp/spd"
 )
 
 /*
@@ -43,17 +44,23 @@ func (worker *Worker) Write(p []byte) (n int, err error) {
 		for {
 			select {
 			case <-worker.pool.ctx.Done():
+				errnie.Warns("pool closing")
 				if errnie.Handles(worker.Close()) != nil {
 					return
 				}
 			case <-worker.ctx.root.Done():
+				errnie.Warns("worker done")
 				return
 			default:
 				worker.pool.workers <- worker.jobs
 				job := <-worker.jobs
 
 				t := time.Now()
-				job.Do()
+				dg := &spd.Empty
+				dg.Decode(p)
+
+				_ = job.Do(dg)
+
 				worker.latency = time.Duration(
 					time.Since(t).Nanoseconds(),
 				)

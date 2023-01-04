@@ -95,6 +95,11 @@ func (scaler *Scaler) initialize() {
 				worker.Close()
 			}
 
+			errnie.Debugs(
+				"pool size ->", len(scaler.workers),
+				"latency ->", latency,
+			)
+
 			scaler.current = &state{latency, true, false}
 		}
 	}()
